@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="vi" >
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Web Chat</title>
+	<link href="https://fonts.googleapis.com/css?family=Poppins:400,500&display=swap" rel="stylesheet">
+	<script src = "socket.io/socket.io.js" ></script>
+	<style>
+		body {
+			background-color: #f7f7f7;
+			font-family: 'Poppins', sans-serif;
+			color: #444;
+			margin: 0;
+			padding: 0;
+		}
+
+		.container {
+			width: 100%;
+			max-width: 600px;
+			margin: 0 auto;
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			justify-content: center;
+			height: 100vh;
+			padding: 20px;
+		}
+
+		.header {
+			text-align: center;
+			margin-bottom: 30px;
+			font-size: 30px;
+			font-weight: 500;
+			color: #444;
+		}
+
+		.input-container {
+			display: flex;
+			align-items: center;
+			width: 100%;
+			margin-bottom: 20px;
+		}
+
+		.input-container label {
+			font-size: 20px;
+			margin-right: 10px;
+			color: #555;
+		}
+
+		.input-container input[type="text"] {
+			padding: 10px;
+			font-size: 18px;
+			border: 2px solid #ccc;
+			border-radius: 4px;
+			width: 100%;
+			min-width: 300px;
+			max-width: 500px;
+			background-color: #f7f7f7;
+			color: #444;
+		}
+
+		.input-container button {
+			background-color: #4CAF50;
+			color: #fff;
+			border: none;
+			border-radius: 4px;
+			padding: 10px 20px;
+			font-size: 16px;
+			cursor: pointer;
+			transition: all 0.2s ease-in-out;
+		}
+
+		.input-container button:hover {
+			background-color: #2e8540;
+		}
+
+		@media screen and (max-width: 600px) {
+			.input-container {
+				flex-direction: column;
+			}
+
+			.input-container label {
+				margin-bottom: 10px;
+			}
+		}
+	</style>
+	<script>
+	var socket = io.connect('http://localhost:3000');
+	
+	</script>
+</head>
+<body>
+	<div class="container">
+	<label for="find">find id:</label>
+	<input type="text" id="find" />
+	<button id = "sfind" >Gửi</button>
+		<h1 class="header">Web Chat</h1>
+		<div class="input-container">
+		<p id = "ds_nd" ></p>
+			<label for="message">Tin Nhắn:</label>
+			<input type="text" id="message" />
+			<button id = "send" >Gửi</button>
+			<p id = "myid" ></p>
+		</div>
+	</div>
+	<script>
+
+	
+	socket.on("uid", function(duid){
+	document.getElementById("myid").innerHTML = "My UID: " + duid;
+	});
+	socket.on("s_mess", function(data){
+	var nd_tam = document.getElementById("ds_nd").innerHTML;
+	document.getElementById("ds_nd").innerHTML = nd_tam + data + "</br>";
+	});
+		var send = document.getElementById("send");
+	var mess = document.getElementById("message");
+	send.onclick = function(){
+	var tn = mess.value;
+	socket.emit("mess", tn);
+	};
+	</script>
+</body>
+</html>
